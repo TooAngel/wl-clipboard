@@ -135,6 +135,9 @@ void popup_surface_init(struct popup_surface *self) {
     wl_surface_attach(self->wl_surface, wl_buffer, 0, 0);
     wl_surface_damage(self->wl_surface, 0, 0, width, height);
 
+    /* Map the surface before asking for focus below */
+    wl_surface_commit(self->wl_surface);
+
     /* Ask the compositor nicely to give us focus */
 #ifdef HAVE_GTK_SHELL
     if (self->gtk_surface != NULL) {
@@ -159,8 +162,6 @@ void popup_surface_init(struct popup_surface *self) {
         }
     }
 #endif
-
-    wl_surface_commit(self->wl_surface);
 }
 
 void popup_surface_destroy(struct popup_surface *self) {
